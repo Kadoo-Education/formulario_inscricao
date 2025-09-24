@@ -40,6 +40,18 @@
                 <option value="outro" <?php echo (isset($_POST['como_conheceu']) && $_POST['como_conheceu'] == 'outro') ? 'selected' : ''; ?>>Outro</option>
             </select>
         </div>
+
+        <div class="form-group">
+            <label for="categoria">Categoria <span class="required">*</span></label>
+            <select id="categoria" name="categoria" required>
+                <option value="">Selecione a categoria...</option>
+                <?php foreach ($categorias as $categoria_item): ?>
+                    <option value="<?php echo $categoria_item['id']; ?>" <?php echo (isset($_POST['categoria']) && $_POST['categoria'] == $categoria_item['id']) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($categoria_item['nome']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
     </div>
 
     <!-- Seção 2: Membros -->

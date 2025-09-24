@@ -5,7 +5,7 @@ session_start();
 
 require_once 'config/database.php';
 require_once 'classes/Programa.php';
-require_once 'classes/Equipe.php';
+require_once 'classes/Equipe.php';;
 require_once 'includes/process_inscricao.php';
 
 $success_message = null;
@@ -26,6 +26,14 @@ try {
     $db = new Database();
     $unidades = new Programa($db->getPDO());
     $unidades = $unidades->buscarUnidades();
+} catch (Exception $e) {
+    $error_message = "Erro de conexão com o banco de dados.";
+}
+
+try {
+    $db = new Database();
+    $categorias = new Programa($db->getPDO());
+    $categorias = $categorias->buscarCategoria();
 } catch (Exception $e) {
     $error_message = "Erro de conexão com o banco de dados.";
 }

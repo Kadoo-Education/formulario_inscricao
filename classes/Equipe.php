@@ -25,11 +25,11 @@ class Equipe
     /**
      * Criar nova equipe - CORRIGIDO com link_pitch
      */
-    public function criarEquipe($programa_id, $nome_equipe, $descricao = '', $link_pitch = '')
+    public function criarEquipe($programa_id, $nome_equipe, $descricao = '', $link_pitch = '', $categoria_id = '')
     {
         $stmt = $this->pdo->prepare("
-            INSERT INTO equipes (programa_id, nome_equipe, descricao, link_pitch, max_membros, status, created_at) 
-            VALUES (?, ?, ?, ?, 6, 'ativa', NOW())
+            INSERT INTO equipes (programa_id, categoria_id, nome_equipe, descricao, link_pitch, max_membros, status, created_at) 
+            VALUES (?, ?, ?, ?, ?, 6, 'ativa', NOW())
         ");
         $stmt->execute([$programa_id, $nome_equipe, $descricao, $link_pitch]);
         return $this->pdo->lastInsertId();

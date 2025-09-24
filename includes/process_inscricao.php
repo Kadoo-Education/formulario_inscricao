@@ -18,38 +18,28 @@ function processarInscricao($post_data)
         $programa_id = $post_data['programa'] ?? null;
         $nome_equipe = Validator::sanitizeString($post_data['nome_equipe'] ?? '');
         $link_pitch = Validator::sanitizeString($post_data['link_pitch'] ?? ''); // ADICIONADO
+        $categoria_id = $post_data['categoria'] ?? null; 
 
         // Validação inicial - CORRIGIDO
-        if (!$programa_id || !$nome_equipe || !$link_pitch) {
-            throw new Exception("Programa, nome da equipe e link do pitch são obrigatórios.");
+        if (!$programa_id || !$nome_equipe || !$link_pitch || !$categoria_id) {
+            throw new Exception("Programa, nome da equipe, link do pitch e categoria são obrigatórios.");
         }
+
 
         // Validar se é uma URL válida - MOVIDO PARA CIMA
         if (!filter_var($link_pitch, FILTER_VALIDATE_URL)) {
             throw new Exception("Link do pitch deve ser uma URL válida.");
         }
 
-        // Verificar termo de aceite
-        if (!isset($post_data['aceite_termos']) || $post_data['aceite_termos'] != '1') {
-            throw new Exception("É necessário aceitar os termos e condições.");
-        }
 
-        // Verificar se o programa existe e está ativo
-        if (!$programa->verificarPrograma($programa_id)) {
-            throw new Exception("Programa não encontrado ou inscrições fechadas.");
-        }
-
-        // Verificar se já existe equipe com este nome no programa
-        if ($equipe->verificarNomeEquipe($nome_equipe, $programa_id)) {
-            throw new Exception("Já existe uma equipe com este nome neste programa.");
-        }
 
         // Criar equipe - CORRIGIDO com link_pitch
         $equipe_id = $equipe->criarEquipe(
             $programa_id,
             $nome_equipe,
-            $post_data['observacoes'] ?? '',
-            $link_pitch
+            descricao: $post_data['observacoes'] ?? '',
+            link_pitch: $link_pitch,
+            categoria_id: $categoria_id
         );
 
         // Processar membros da equipe

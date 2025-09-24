@@ -33,6 +33,9 @@ class Programa {
         return $stmt->fetch() !== false;
     }
 
+    /**
+     * Buscar unidades
+     */
     public function buscarUnidades() {
         $stmt = $this->pdo->prepare("
             SELECT id, nome 
@@ -42,6 +45,23 @@ class Programa {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function buscarCategoria() {
+        $stmt = $this->pdo->prepare("
+            SELECT id, nome, descricao 
+            FROM categorias 
+            ORDER BY nome
+        ");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function verificarCategoria($categoria_id) {
+        $stmt = $this->pdo->prepare("\n            SELECT id \n            FROM categorias \n            WHERE id = ?\n        ");
+        $stmt->execute([$categoria_id]);
+        return $stmt->fetch() !== false;
+    }
+
 
 
 }
