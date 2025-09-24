@@ -32,5 +32,17 @@ class Programa {
         $stmt->execute([$programa_id]);
         return $stmt->fetch() !== false;
     }
+
+    public function buscarUnidades() {
+        $stmt = $this->pdo->prepare("
+            SELECT id, nome 
+            FROM unidades 
+            ORDER BY nome
+        ");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
 }
 ?>

@@ -1,15 +1,18 @@
 <?php
-class Equipe {
+class Equipe
+{
     private $pdo;
 
-    public function __construct($pdo) {
+    public function __construct($pdo)
+    {
         $this->pdo = $pdo;
     }
 
     /**
      * Verificar se já existe equipe com o nome no programa
      */
-    public function verificarNomeEquipe($nome_equipe, $programa_id) {
+    public function verificarNomeEquipe($nome_equipe, $programa_id)
+    {
         $stmt = $this->pdo->prepare("
             SELECT id 
             FROM equipes 
@@ -22,7 +25,8 @@ class Equipe {
     /**
      * Criar nova equipe - CORRIGIDO com link_pitch
      */
-    public function criarEquipe($programa_id, $nome_equipe, $descricao = '', $link_pitch = '') {
+    public function criarEquipe($programa_id, $nome_equipe, $descricao = '', $link_pitch = '')
+    {
         $stmt = $this->pdo->prepare("
             INSERT INTO equipes (programa_id, nome_equipe, descricao, link_pitch, max_membros, status, created_at) 
             VALUES (?, ?, ?, ?, 6, 'ativa', NOW())
@@ -34,19 +38,18 @@ class Equipe {
     /**
      * Atualizar líder da equipe
      */
-    public function atualizarLider($equipe_id, $lider_cpf) {
-        $stmt = $this->pdo->prepare("
-            UPDATE equipes 
-            SET lider_cpf = ? 
-            WHERE id = ?
-        ");
-        $stmt->execute([$lider_cpf, $equipe_id]);
+    public function atualizarProfessorResponsavel($equipe_id, $professor_cpf)
+    {
+        $stmt = $this->pdo->prepare("\n            UPDATE equipes \n            SET professor_cpf = ? \n            WHERE id = ?\n        ");
+        $stmt->execute([$professor_cpf, $equipe_id]);
     }
+
 
     /**
      * Verificar CPF já cadastrado no programa
      */
-    public function verificarCpfPrograma($cpf, $programa_id) {
+    public function verificarCpfPrograma($cpf, $programa_id)
+    {
         $stmt = $this->pdo->prepare("
             SELECT i.id 
             FROM inscricoes_new i 
@@ -60,7 +63,8 @@ class Equipe {
     /**
      * Inserir membro na equipe
      */
-    public function inserirMembro($dados) {
+    public function inserirMembro($dados)
+    {
         $stmt = $this->pdo->prepare("
             INSERT INTO inscricoes_new (
                 programa_id, equipe_id, is_lider, nome_completo, email, cpf, telefone, 
@@ -71,7 +75,7 @@ class Equipe {
                 ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW()
             )
         ");
-        
+
         return $stmt->execute([
             $dados['programa_id'],
             $dados['equipe_id'],
