@@ -20,7 +20,12 @@
         
         <div class="form-group">
             <label for="nome_equipe">Nome da Equipe <span class="required">*</span></label>
-            <input type="text" id="nome_equipe" name="nome_equipe" required maxlength="100" placeholder="Digite o nome da sua equipe" value="<?php echo isset($_POST['nome_equipe']) ? htmlspecialchars($_POST['nome_equipe']) : ''; ?>">
+            <input type="text" id="nome_equipe" name="nome_equipe" required maxlength="100"
+                placeholder="Digite o nome da sua equipe"
+                value="<?php echo isset($_POST['nome_equipe']) ? htmlspecialchars($_POST['nome_equipe']) : ''; ?>">
+            <small class="form-text text-muted">
+                Dê um nome para sua equipe, este nome será validado pela comissão organizadora e irá representá-los durante a competição.
+            </small>
         </div>
 
         <div class="form-group">
@@ -84,7 +89,6 @@
                         <input type="number" name="membro_1_idade" min="14" max="100" required value="<?php echo isset($_POST['membro_1_idade']) ? htmlspecialchars($_POST['membro_1_idade']) : ''; ?>">
                     </div>
                     
-                    
                     <div class="form-group">
                         <label>Função <span class="required">*</span></label>
                         <div class="radio-group">
@@ -99,8 +103,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- adicionado serie/ano -->  
 
                     <div class="form-group">
                         <label>Série/Ano <span class="required">*</span></label>
@@ -114,15 +116,17 @@
                         </div>
                     </div>
                     
-                <!-- UNIDADE ESCOLAR -->
+                    <!-- UNIDADE ESCOLAR - Corrigido para buscar do banco -->
                     <div class="form-group">
                         <label>Unidade Escolar <span class="required">*</span></label>
                         <div class="select-group">
                             <select name="membro_1_unidade" required>
                                 <option value="">Selecione</option>
-                                <option value="Bacelar Portela" <?php echo (isset($_POST['membro_1_unidade']) && $_POST['membro_1_unidade'] == 'Bacelar Portela') ? 'selected' : ''; ?>>Bacelar Portela</option>
-                                <option value="Desembargador Sarney" <?php echo (isset($_POST['membro_1_unidade']) && $_POST['membro_1_unidade'] == 'Desembargador Sarney') ? 'selected' : ''; ?>>Desembargador Sarney</option>
-                                <option value="Tamancão" <?php echo (isset($_POST['membro_1_unidade']) && $_POST['membro_1_unidade'] == 'Tamancão') ? 'selected' : ''; ?>>Tamancão</option>
+                                <?php foreach ($unidades as $unidade): ?>
+                                    <option value="<?php echo $unidade['id']; ?>" <?php echo (isset($_POST['membro_1_unidade']) && $_POST['membro_1_unidade'] == $unidade['id']) ? 'selected' : ''; ?>>
+                                        <?php echo htmlspecialchars($unidade['nome']); ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
@@ -154,11 +158,10 @@
                                 </select>
                             </div>
                             <div id="outroNecessidade_1" style="margin-top:10px; display:none;">
-                                <input type="text" name="membro_1_tipo_necessidade_outro" placeholder="Descreva a necessidade" style="width:100%;max-width:320px;">
+                                <input type="text" name="membro_1_tipo_necessidade_outro" placeholder="Descreva a necessidade" style="width:100%;max-width:320px;" value="<?php echo isset($_POST['membro_1_tipo_necessidade_outro']) ? htmlspecialchars($_POST['membro_1_tipo_necessidade_outro']) : ''; ?>">
                             </div>
                         </div>
                     </div>
-
                 </div>
                 
                 <input type="hidden" name="membro_1_lider" value="1">
@@ -171,7 +174,7 @@
         </div>
     </div>
 
-<!-- Seção 3: Finalização -->
+    <!-- Seção 3: Finalização -->
     <div class="section" id="section3">
         <h3 class="section-title">
             <span class="section-number">3</span>
@@ -180,17 +183,17 @@
         
         <div class="form-group">
             <label for="observacoes">Resumo do projeto</label>
-            <textarea id="observacoes" name="observacoes" rows="4" placeholder="Descrição resumida da proposta ou protótipo a ser desenvolvido no hackathon... "><?php echo isset($_POST['observacoes']) ? htmlspecialchars($_POST['observacoes']) : ''; ?></textarea>
+            <textarea id="observacoes" name="observacoes" rows="4" placeholder="Descrição resumida da proposta ou protótipo a ser desenvolvido no hackathon..."><?php echo isset($_POST['observacoes']) ? htmlspecialchars($_POST['observacoes']) : ''; ?></textarea>
         </div>
 
         <div class="form-group">
-            <label for="link_pitch"> Apresentação do Pitch – Inserir o link do vídeo hospedado em plataforma de compartilhamento online. <span class="required">*</span></label>
+            <label for="link_pitch">Apresentação do Pitch – Inserir o link do vídeo hospedado em plataforma de compartilhamento online. <span class="required">*</span></label>
             <input type="url" id="link_pitch" name="link_pitch" placeholder="https://youtube.com/watch?v=..." required value="<?php echo isset($_POST['link_pitch']) ? htmlspecialchars($_POST['link_pitch']) : ''; ?>">
         </div>
 
         <div class="terms-section">
             <div class="terms-title">Termos e Condições</div>             
-        <div class="terms-content">                 
+            <div class="terms-content">                 
                 <p><strong>Ao realizar sua inscrição, o(a) participante declara estar ciente e de acordo com as seguintes condições:</strong></p>
                 
                 <p><strong>1. Da Participação</strong></p>
@@ -239,4 +242,3 @@
         </button>
     </div>
 </form>
-

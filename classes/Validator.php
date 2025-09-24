@@ -107,11 +107,6 @@ class Validator {
     }
     
     
-    public static function validarTermosObrigatorios($participacao, $imagemVoz, $direitosAutorais) {
-        // Todos os três termos são obrigatórios
-        return $participacao == '1' && $imagemVoz == '1' && $direitosAutorais == '1';
-    }
-    
     public static function validarEstrutureaEquipe($membros) {
         $professores = 0;
         $estudantes = 0;
