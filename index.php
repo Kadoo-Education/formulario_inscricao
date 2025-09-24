@@ -96,6 +96,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($error_message)) {
         </div>
     </div>
 
+    <script>
+        const UNIDADES_DATA = <?php echo json_encode($unidades ?? []); ?>;
+    </script>
     <script src="assets/js/form.js"></script>
+
 </body>
 </html>

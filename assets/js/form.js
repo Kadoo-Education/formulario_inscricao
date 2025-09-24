@@ -42,11 +42,11 @@ class TeamForm {
         const selectTipo = document.getElementById(`membro_${numeroMembro}_tipo_necessidade`);
         const outroNecessidade = document.getElementById(`outroNecessidade_${numeroMembro}`);
         const inputOutro = document.querySelector(`input[name="membro_${numeroMembro}_tipo_necessidade_outro"]`);
-        
+
         if (!selectNecessidade) return;
-        
+
         // Controlar exibição do tipo de necessidade
-        selectNecessidade.addEventListener('change', function() {
+        selectNecessidade.addEventListener('change', function () {
             if (this.value === 'sim') {
                 tipoNecessidade.style.display = 'block';
                 selectTipo.setAttribute('required', 'required');
@@ -61,10 +61,10 @@ class TeamForm {
                 }
             }
         });
-        
+
         // Controlar exibição do campo "outro"
         if (selectTipo) {
-            selectTipo.addEventListener('change', function() {
+            selectTipo.addEventListener('change', function () {
                 if (this.value === 'outro') {
                     if (outroNecessidade) {
                         outroNecessidade.style.display = 'block';
@@ -81,12 +81,12 @@ class TeamForm {
                 }
             });
         }
-        
+
         // Verificar estado inicial (para quando o formulário é recarregado com dados)
         if (selectNecessidade.value === 'sim') {
             tipoNecessidade.style.display = 'block';
             selectTipo.setAttribute('required', 'required');
-            
+
             if (selectTipo.value === 'outro' && outroNecessidade) {
                 outroNecessidade.style.display = 'block';
                 if (inputOutro) inputOutro.setAttribute('required', 'required');
@@ -105,7 +105,7 @@ class TeamForm {
 
         const memberHTML = this.generateMemberHTML(this.memberCount);
         document.getElementById('teamMembers').insertAdjacentHTML('beforeend', memberHTML);
-        
+
         this.applyMasks();
         this.updateProgress();
         this.configurarNecessidades(this.memberCount); // ADICIONADO
@@ -114,7 +114,7 @@ class TeamForm {
         if (memberCard) {
             // Função/Serie
             memberCard.querySelectorAll(`input[name="membro_${this.memberCount}_cargo"]`).forEach(radio => {
-                radio.addEventListener('change', function() {
+                radio.addEventListener('change', function () {
                     const serieGroup = memberCard.querySelector(`#serieAnoGroup_${teamForm.memberCount}`);
                     if (this.value === 'professor') {
                         serieGroup.style.display = 'none';
@@ -130,7 +130,7 @@ class TeamForm {
 
     removeMember(memberNum) {
         if (memberNum === 1) return;
-        
+
         const memberDiv = document.querySelector(`[data-member="${memberNum}"]`);
         if (memberDiv) {
             memberDiv.remove();
@@ -189,28 +189,27 @@ class TeamForm {
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Unidade Escolar <span class="required">*</span></label>
-                        <div class="select-group">
-                            <select name="membro_${memberNum}_unidade" required>
-                                <option value="">Selecione</option>
-                                <option value="1">Bacelar Portela</option>
-                                <option value="2">Desembargador Sarney</option>
-                                <option value="3">Tamancão</option>
-                            </select>
-                        </div>
+                                    <div class="form-group serie-ano-group" id="serieAnoGroup_${memberNum}">
+                    <label>Série/Ano <span class="required">*</span></label>
+                    <div class="select-group">
+                        <select name="membro_${memberNum}_serie" required>
+                            <option value="">Selecione</option>
+                            <option value="1">1º Ano</option>
+                            <option value="2">2º Ano</option>
+                            <option value="3">3º Ano</option>
+                        </select>
                     </div>
-                    <div class="form-group serie-ano-group" id="serieAnoGroup_${memberNum}">
-                        <label>Série/Ano <span class="required">*</span></label>
-                        <div class="select-group">
-                            <select name="membro_${memberNum}_serie" required>
-                                <option value="">Selecione</option>
-                                <option value="1">1º Ano</option>
-                                <option value="2">2º Ano</option>
-                                <option value="3">3º Ano</option>
-                            </select>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label>Unidade Escolar <span class="required">*</span></label>
+                    <div class="select-group">
+                        <select name="membro_${memberNum}_unidade" required>
+                            <option value="">Selecione</option>
+                            ${UNIDADES_DATA.map(unidade => `<option value="${unidade.id}">${unidade.nome}</option>`).join("")}
+                        </select>
                     </div>
+                </div>
+
                 </div>
 
                 <!-- SEÇÃO DE NECESSIDADES ESPECIAIS - ADICIONADA -->
@@ -251,9 +250,9 @@ class TeamForm {
     updateMemberCount() {
         const counterSpan = document.getElementById('memberCount');
         const addBtn = document.getElementById('addMemberBtn');
-        
+
         if (counterSpan) counterSpan.textContent = this.memberCount;
-        
+
         if (addBtn) {
             if (this.memberCount >= this.maxMembers) {
                 addBtn.classList.add('disabled');
@@ -270,10 +269,10 @@ class TeamForm {
         members.forEach((member, index) => {
             const newNumber = index + 1;
             member.dataset.member = newNumber;
-            
+
             const titleEl = member.querySelector('.member-title');
             if (titleEl) titleEl.textContent = `Membro ${newNumber}`;
-            
+
             const inputs = member.querySelectorAll('input, select');
             inputs.forEach(input => {
                 const name = input.name;
@@ -281,7 +280,7 @@ class TeamForm {
                     const parts = name.split('_');
                     parts[1] = newNumber;
                     input.name = parts.join('_');
-                    
+
                     // Atualizar IDs também
                     if (input.id && input.id.includes('membro_')) {
                         const idParts = input.id.split('_');
@@ -317,10 +316,10 @@ class TeamForm {
                 removeBtn.setAttribute('onclick', `teamForm.removeMember(${newNumber})`);
             }
         });
-        
+
         this.memberCount = members.length;
         this.updateMemberCount();
-        
+
         // Reconfigurar eventos de necessidades após renumeração
         this.initNecessidadeEvents();
     }
@@ -330,22 +329,22 @@ class TeamForm {
         if (!progressFill) return;
 
         let completed = 0;
-        
+
         // Seção 1
         const programa = document.getElementById('programa')?.value || '';
         const nomeEquipe = document.getElementById('nome_equipe')?.value || '';
         const comoConheceu = document.getElementById('como_conheceu')?.value || '';
         const linkPitch = document.getElementById('link_pitch')?.value || '';
         if (programa && nomeEquipe && comoConheceu && linkPitch) completed++;
-        
+
         // Seção 2
         const primeiroMembro = document.querySelector('input[name="membro_1_nome"]')?.value || '';
         if (primeiroMembro) completed++;
-        
+
         // Seção 3
         const termos = document.querySelector('input[name="aceite_termos"]')?.checked || false;
         if (termos) completed++;
-        
+
         const progress = (completed / 3) * 100;
         progressFill.style.width = progress + '%';
     }
@@ -353,10 +352,10 @@ class TeamForm {
     applyMasks() {
         // Máscara CPF
         document.querySelectorAll('.cpf-mask').forEach(input => {
-            input.addEventListener('input', function(e) {
+            input.addEventListener('input', function (e) {
                 let value = e.target.value.replace(/\D/g, '');
                 if (value.length > 11) value = value.slice(0, 11);
-                
+
                 if (value.length > 9) {
                     value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
                 } else if (value.length > 6) {
@@ -364,23 +363,23 @@ class TeamForm {
                 } else if (value.length > 3) {
                     value = value.replace(/(\d{3})(\d{3})/, '$1.$2');
                 }
-                
+
                 e.target.value = value;
             });
         });
 
         // Máscara Telefone
         document.querySelectorAll('.phone-mask').forEach(input => {
-            input.addEventListener('input', function(e) {
+            input.addEventListener('input', function (e) {
                 let value = e.target.value.replace(/\D/g, '');
                 if (value.length > 11) value = value.slice(0, 11);
-                
+
                 if (value.length > 6) {
                     value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
                 } else if (value.length > 2) {
                     value = value.replace(/(\d{2})(\d+)/, '($1) $2');
                 }
-                
+
                 e.target.value = value;
             });
         });
@@ -456,21 +455,21 @@ class TeamForm {
     // NOVO MÉTODO - Validar campos de necessidades
     validarNecessidades() {
         let erros = [];
-        
+
         for (let i = 1; i <= 6; i++) {
             const selectNecessidade = document.getElementById(`membro_${i}_necessidade`);
             if (!selectNecessidade) continue;
-            
+
             const nome = document.querySelector(`input[name="membro_${i}_nome"]`);
             if (!nome || !nome.value.trim()) continue; // Se não tem nome, pula validação
-            
+
             if (selectNecessidade.value === 'sim') {
                 const selectTipo = document.getElementById(`membro_${i}_tipo_necessidade`);
                 if (!selectTipo || !selectTipo.value) {
                     erros.push(`Membro ${i}: Tipo de necessidade é obrigatório`);
                     continue;
                 }
-                
+
                 if (selectTipo.value === 'outro') {
                     const inputOutro = document.querySelector(`input[name="membro_${i}_tipo_necessidade_outro"]`);
                     if (!inputOutro || !inputOutro.value.trim()) {
@@ -479,14 +478,14 @@ class TeamForm {
                 }
             }
         }
-        
+
         return erros;
     }
 }
 
 // Inicializar quando o DOM estiver carregado
 let teamForm;
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     teamForm = new TeamForm();
 
     // --- INICIALIZA OS EVENTOS DO MEMBRO 1 ---
@@ -494,7 +493,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (memberCard1) {
         // Função/Serie
         memberCard1.querySelectorAll('input[name="membro_1_cargo"]').forEach(radio => {
-            radio.addEventListener('change', function() {
+            radio.addEventListener('change', function () {
                 const serieGroup = memberCard1.querySelector('#serieAnoGroup_1');
                 if (this.value === 'professor') {
                     serieGroup.style.display = 'none';
@@ -512,7 +511,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Função global para manter compatibilidade
-window.removeMember = function(memberNum) {
+window.removeMember = function (memberNum) {
     if (teamForm) {
         teamForm.removeMember(memberNum);
     }
