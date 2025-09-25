@@ -5,7 +5,7 @@
             <span class="section-number">1</span>
             Programa e Equipe
         </h3>
-        
+
         <div class="form-group">
             <label for="programa">Programa <span class="required">*</span></label>
             <select id="programa" name="programa" required>
@@ -17,14 +17,15 @@
                 <?php endforeach; ?>
             </select>
         </div>
-        
+
         <div class="form-group">
             <label for="nome_equipe">Nome da Equipe <span class="required">*</span></label>
             <input type="text" id="nome_equipe" name="nome_equipe" required maxlength="100"
                 placeholder="Digite o nome da sua equipe"
                 value="<?php echo isset($_POST['nome_equipe']) ? htmlspecialchars($_POST['nome_equipe']) : ''; ?>">
             <small class="form-text text-muted">
-                Dê um nome para sua equipe, este nome será validado pela comissão organizadora e irá representá-los durante a competição.
+                Dê um nome para sua equipe, este nome será validado pela comissão organizadora e irá representá-los
+                durante a competição.
             </small>
         </div>
 
@@ -41,17 +42,30 @@
             </select>
         </div>
 
+
         <div class="form-group">
-            <label for="categoria">Categoria <span class="required">*</span></label>
+            <div class="label-with-help">
+                <label for="categoria">Categoria <span class="required">*</span></label>
+                <span class="help-icon" id="categoriaHelpIcon">?</span>
+            </div>
+            <div class="category-tooltip" id="categoryTooltip">
+                <?php foreach ($categorias as $categoria_item): ?>
+                    <h4><?php echo htmlspecialchars($categoria_item["nome"]); ?></h4>
+                    <p><?php echo nl2br(htmlspecialchars($categoria_item["descricao"])); ?></p>
+                <?php endforeach; ?>
+            </div>
             <select id="categoria" name="categoria" required>
                 <option value="">Selecione a categoria...</option>
                 <?php foreach ($categorias as $categoria_item): ?>
-                    <option value="<?php echo $categoria_item['id']; ?>" <?php echo (isset($_POST['categoria']) && $_POST['categoria'] == $categoria_item['id']) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($categoria_item['nome']); ?>
+                    <option value="<?php echo $categoria_item["id"]; ?>" <?php echo (isset($_POST["categoria"]) && $_POST["categoria"] == $categoria_item["id"]) ? "selected" : ""; ?>>
+                        <?php echo htmlspecialchars($categoria_item["nome"]); ?>
                     </option>
                 <?php endforeach; ?>
             </select>
         </div>
+
+
+
     </div>
 
     <!-- Seção 2: Membros -->
@@ -60,7 +74,7 @@
             <span class="section-number">2</span>
             Membros da Equipe
         </h3>
-        
+
         <div class="member-counter">
             <span id="memberCount">1</span> de 6 membros
         </div>
@@ -72,35 +86,41 @@
                     <div class="member-title">Membro 1</div>
                     <div class="leader-badge">Líder</div>
                 </div>
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label>Nome Completo <span class="required">*</span></label>
-                        <input type="text" name="membro_1_nome" required maxlength="255" value="<?php echo isset($_POST['membro_1_nome']) ? htmlspecialchars($_POST['membro_1_nome']) : ''; ?>">
+                        <input type="text" name="membro_1_nome" required maxlength="255"
+                            value="<?php echo isset($_POST['membro_1_nome']) ? htmlspecialchars($_POST['membro_1_nome']) : ''; ?>">
                     </div>
                     <div class="form-group">
                         <label>E-mail <span class="required">*</span></label>
-                        <input type="email" name="membro_1_email" required maxlength="255" value="<?php echo isset($_POST['membro_1_email']) ? htmlspecialchars($_POST['membro_1_email']) : ''; ?>">
+                        <input type="email" name="membro_1_email" required maxlength="255"
+                            value="<?php echo isset($_POST['membro_1_email']) ? htmlspecialchars($_POST['membro_1_email']) : ''; ?>">
                     </div>
                 </div>
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label>CPF <span class="required">*</span></label>
-                        <input type="text" name="membro_1_cpf" class="cpf-mask" required maxlength="14" placeholder="000.000.000-00" value="<?php echo isset($_POST['membro_1_cpf']) ? htmlspecialchars($_POST['membro_1_cpf']) : ''; ?>">
+                        <input type="text" name="membro_1_cpf" class="cpf-mask" required maxlength="14"
+                            placeholder="000.000.000-00"
+                            value="<?php echo isset($_POST['membro_1_cpf']) ? htmlspecialchars($_POST['membro_1_cpf']) : ''; ?>">
                     </div>
                     <div class="form-group">
                         <label>Telefone <span class="required">*</span></label>
-                        <input type="tel" name="membro_1_telefone" class="phone-mask" required maxlength="20" value="<?php echo isset($_POST['membro_1_telefone']) ? htmlspecialchars($_POST['membro_1_telefone']) : ''; ?>">
+                        <input type="tel" name="membro_1_telefone" class="phone-mask" required maxlength="20"
+                            value="<?php echo isset($_POST['membro_1_telefone']) ? htmlspecialchars($_POST['membro_1_telefone']) : ''; ?>">
                     </div>
                 </div>
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label>Idade <span class="required">*</span></label>
-                        <input type="number" name="membro_1_idade" min="14" max="100" required value="<?php echo isset($_POST['membro_1_idade']) ? htmlspecialchars($_POST['membro_1_idade']) : ''; ?>">
+                        <input type="number" name="membro_1_idade" min="14" max="100" required
+                            value="<?php echo isset($_POST['membro_1_idade']) ? htmlspecialchars($_POST['membro_1_idade']) : ''; ?>">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Função <span class="required">*</span></label>
                         <div class="radio-group">
@@ -108,7 +128,7 @@
                                 <input type="radio" name="membro_1_cargo" value="aluno" required <?php echo (isset($_POST['membro_1_cargo']) && $_POST['membro_1_cargo'] == 'aluno') ? 'checked' : ''; ?>>
                                 <span>Aluno</span>
                             </div>
-                            
+
                             <div class="radio-option">
                                 <input type="radio" name="membro_1_cargo" value="professor" required <?php echo (isset($_POST['membro_1_cargo']) && $_POST['membro_1_cargo'] == 'professor') ? 'checked' : ''; ?>>
                                 <span>Professor</span>
@@ -127,7 +147,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <!-- UNIDADE ESCOLAR - Corrigido para buscar do banco -->
                     <div class="form-group">
                         <label>Unidade Escolar <span class="required">*</span></label>
@@ -142,15 +162,19 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <!-- Necessidade específica -->
-                    <div class="form-group necessidade-especifica" style="display: flex; align-items: center; gap: 32px; flex-wrap: wrap;">
+                    <div class="form-group necessidade-especifica"
+                        style="display: flex; align-items: center; gap: 32px; flex-wrap: wrap;">
                         <div>
-                            <label class="main-label" for="membro_1_necessidade">Você deseja informar alguma necessidade específica para sua participação?</label>
+                            <label class="main-label" for="membro_1_necessidade">Você deseja informar alguma necessidade
+                                específica para sua participação?</label>
                             <div class="select-group" style="max-width: 320px;">
                                 <select name="membro_1_necessidade" id="membro_1_necessidade" required>
-                                    <option value="nao" <?php echo (isset($_POST['membro_1_necessidade']) && $_POST['membro_1_necessidade'] == 'nao') ? 'selected' : ''; ?>>Não, não necessito de apoio adicional</option>
-                                    <option value="sim" <?php echo (isset($_POST['membro_1_necessidade']) && $_POST['membro_1_necessidade'] == 'sim') ? 'selected' : ''; ?>>Sim, gostaria de solicitar suporte</option>
+                                    <option value="nao" <?php echo (isset($_POST['membro_1_necessidade']) && $_POST['membro_1_necessidade'] == 'nao') ? 'selected' : ''; ?>>Não, não necessito
+                                        de apoio adicional</option>
+                                    <option value="sim" <?php echo (isset($_POST['membro_1_necessidade']) && $_POST['membro_1_necessidade'] == 'sim') ? 'selected' : ''; ?>>Sim, gostaria de
+                                        solicitar suporte</option>
                                 </select>
                             </div>
                         </div>
@@ -159,23 +183,31 @@
                             <div class="select-group" style="max-width: 320px;">
                                 <select name="membro_1_tipo_necessidade" id="membro_1_tipo_necessidade">
                                     <option value="">Selecione...</option>
-                                    <option value="def_fisica" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'def_fisica') ? 'selected' : ''; ?>>Deficiência física/mobilidade</option>
-                                    <option value="def_visual" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'def_visual') ? 'selected' : ''; ?>>Deficiência visual</option>
-                                    <option value="def_auditiva" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'def_auditiva') ? 'selected' : ''; ?>>Deficiência auditiva</option>
+                                    <option value="def_fisica" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'def_fisica') ? 'selected' : ''; ?>>
+                                        Deficiência física/mobilidade</option>
+                                    <option value="def_visual" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'def_visual') ? 'selected' : ''; ?>>
+                                        Deficiência visual</option>
+                                    <option value="def_auditiva" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'def_auditiva') ? 'selected' : ''; ?>>
+                                        Deficiência auditiva</option>
                                     <option value="tea" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'tea') ? 'selected' : ''; ?>>TEA</option>
                                     <option value="tdah" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'tdah') ? 'selected' : ''; ?>>TDAH</option>
-                                    <option value="dislexia" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'dislexia') ? 'selected' : ''; ?>>Dislexia/dificuldade de aprendizagem</option>
-                                    <option value="cond_medica" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'cond_medica') ? 'selected' : ''; ?>>Condição médica/saúde</option>
-                                    <option value="outro" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'outro') ? 'selected' : ''; ?>>Outro</option>
+                                    <option value="dislexia" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'dislexia') ? 'selected' : ''; ?>>
+                                        Dislexia/dificuldade de aprendizagem</option>
+                                    <option value="cond_medica" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'cond_medica') ? 'selected' : ''; ?>>
+                                        Condição médica/saúde</option>
+                                    <option value="outro" <?php echo (isset($_POST['membro_1_tipo_necessidade']) && $_POST['membro_1_tipo_necessidade'] == 'outro') ? 'selected' : ''; ?>>Outro
+                                    </option>
                                 </select>
                             </div>
                             <div id="outroNecessidade_1" style="margin-top:10px; display:none;">
-                                <input type="text" name="membro_1_tipo_necessidade_outro" placeholder="Descreva a necessidade" style="width:100%;max-width:320px;" value="<?php echo isset($_POST['membro_1_tipo_necessidade_outro']) ? htmlspecialchars($_POST['membro_1_tipo_necessidade_outro']) : ''; ?>">
+                                <input type="text" name="membro_1_tipo_necessidade_outro"
+                                    placeholder="Descreva a necessidade" style="width:100%;max-width:320px;"
+                                    value="<?php echo isset($_POST['membro_1_tipo_necessidade_outro']) ? htmlspecialchars($_POST['membro_1_tipo_necessidade_outro']) : ''; ?>">
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <input type="hidden" name="membro_1_lider" value="1">
             </div>
         </div>
@@ -192,65 +224,102 @@
             <span class="section-number">3</span>
             Finalização
         </h3>
-        
+
         <div class="form-group">
             <label for="observacoes">Resumo do projeto</label>
-            <textarea id="observacoes" name="observacoes" rows="4" placeholder="Descrição resumida da proposta ou protótipo a ser desenvolvido no hackathon..."><?php echo isset($_POST['observacoes']) ? htmlspecialchars($_POST['observacoes']) : ''; ?></textarea>
+            <textarea id="observacoes" name="observacoes" rows="4"
+                placeholder="Descrição resumida da proposta ou protótipo a ser desenvolvido no hackathon..."><?php echo isset($_POST['observacoes']) ? htmlspecialchars($_POST['observacoes']) : ''; ?></textarea>
         </div>
 
         <div class="form-group">
-            <label for="link_pitch">Apresentação do Pitch – Inserir o link do vídeo hospedado em plataforma de compartilhamento online. <span class="required">*</span></label>
-            <input type="url" id="link_pitch" name="link_pitch" placeholder="https://youtube.com/watch?v=..." required value="<?php echo isset($_POST['link_pitch']) ? htmlspecialchars($_POST['link_pitch']) : ''; ?>">
+            <label for="link_pitch">Apresentação do Pitch – Inserir o link do vídeo hospedado em plataforma de
+                compartilhamento online. <span class="required">*</span></label>
+            <input type="url" id="link_pitch" name="link_pitch" placeholder="https://youtube.com/watch?v=..." required
+                value="<?php echo isset($_POST['link_pitch']) ? htmlspecialchars($_POST['link_pitch']) : ''; ?>">
         </div>
 
         <div class="terms-section">
-            <div class="terms-title">Termos e Condições</div>             
-            <div class="terms-content">                 
-                <p><strong>Ao realizar sua inscrição, o(a) participante declara estar ciente e de acordo com as seguintes condições:</strong></p>
-                
+            <div class="terms-title">Termos e Condições</div>
+            <div class="terms-content">
+                <p><strong>Ao realizar sua inscrição, o(a) participante declara estar ciente e de acordo com as
+                        seguintes condições:</strong></p>
+
                 <p><strong>1. Da Participação</strong></p>
                 <p>• A participação é voluntária, gratuita e sem fins lucrativos.</p>
-                <p>• O participante compromete-se a participar ativamente de todas as etapas do Hackathon, incluindo mentorias, oficinas, atividades presenciais e online, respeitando prazos e cronograma definidos pela organização.</p>
-                <p>• Cada participante é responsável por fornecer informações verídicas, completas e atualizadas no ato da inscrição.</p>
-                
+                <p>• O participante compromete-se a participar ativamente de todas as etapas do Hackathon, incluindo
+                    mentorias, oficinas, atividades presenciais e online, respeitando prazos e cronograma definidos pela
+                    organização.</p>
+                <p>• Cada participante é responsável por fornecer informações verídicas, completas e atualizadas no ato
+                    da inscrição.</p>
+
                 <p><strong>2. Da Conduta</strong></p>
-                <p>• É dever do(a) participante manter conduta ética, respeitosa e colaborativa com colegas, mentores, jurados e equipe organizadora.</p>
-                <p>• É vedada qualquer forma de discriminação, assédio, plágio ou conduta inadequada, sob pena de desclassificação imediata.</p>
-                
+                <p>• É dever do(a) participante manter conduta ética, respeitosa e colaborativa com colegas, mentores,
+                    jurados e equipe organizadora.</p>
+                <p>• É vedada qualquer forma de discriminação, assédio, plágio ou conduta inadequada, sob pena de
+                    desclassificação imediata.</p>
+
                 <p><strong>3. Do Uso de Imagem e Voz</strong></p>
-                <p>• O participante autoriza o uso de sua imagem, voz e nome em fotos, vídeos e demais registros produzidos durante o Hackathon, exclusivamente para fins educacionais, científicos, culturais e institucionais, em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).</p>
-                <p>• Para menores de 18 anos, é obrigatória a assinatura do Termo de Autorização de Uso de Imagem e Voz pelo responsável legal, conforme modelo anexo ao edital.</p>
-                
+                <p>• O participante autoriza o uso de sua imagem, voz e nome em fotos, vídeos e demais registros
+                    produzidos durante o Hackathon, exclusivamente para fins educacionais, científicos, culturais e
+                    institucionais, em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).</p>
+                <p>• Para menores de 18 anos, é obrigatória a assinatura do Termo de Autorização de Uso de Imagem e Voz
+                    pelo responsável legal, conforme modelo anexo ao edital.</p>
+
                 <p><strong>4. Da Propriedade Intelectual e Cessão de Direitos Autorais</strong></p>
-                <p>• Os protótipos, soluções e ideias desenvolvidos durante o Hackathon serão de autoria dos(as) participantes.</p>
-                <p>• Contudo, o(a) participante cede, de forma gratuita, total, irrevogável e irretratável, ao IEMA e à Defensoria Pública do Estado do Maranhão (DPE/MA), os direitos de utilização, divulgação, publicação, reprodução, adaptação, armazenamento e distribuição dos materiais desenvolvidos, em qualquer meio físico ou digital, para fins educacionais, científicos, sociais e institucionais.</p>
-                <p>• A cessão não impede que o participante, de forma individual ou em grupo, continue aprimorando ou utilizando a solução criada em outros contextos, desde que respeitado o caráter público e educativo do evento.</p>
-                <p>• Para formalização, será exigida a assinatura da Declaração de Cessão de Direitos Autorais, conforme modelo anexo ao edital.</p>
-                
+                <p>• Os protótipos, soluções e ideias desenvolvidos durante o Hackathon serão de autoria dos(as)
+                    participantes.</p>
+                <p>• Contudo, o(a) participante cede, de forma gratuita, total, irrevogável e irretratável, ao IEMA e à
+                    Defensoria Pública do Estado do Maranhão (DPE/MA), os direitos de utilização, divulgação,
+                    publicação, reprodução, adaptação, armazenamento e distribuição dos materiais desenvolvidos, em
+                    qualquer meio físico ou digital, para fins educacionais, científicos, sociais e institucionais.</p>
+                <p>• A cessão não impede que o participante, de forma individual ou em grupo, continue aprimorando ou
+                    utilizando a solução criada em outros contextos, desde que respeitado o caráter público e educativo
+                    do evento.</p>
+                <p>• Para formalização, será exigida a assinatura da Declaração de Cessão de Direitos Autorais, conforme
+                    modelo anexo ao edital.</p>
+
                 <p><strong>5. Dos Termos de Autorização e Documentos Obrigatórios</strong></p>
                 <p>Para efetivar sua inscrição, o(a) participante deverá apresentar:</p>
                 <p>1. Termo de Autorização para Participação (obrigatório a todos os participantes).</p>
                 <p>2. Termo de Autorização de Uso de Imagem e Voz (obrigatório a todos os participantes).</p>
-                <p>3. Declaração de Cessão de Direitos Autorais das soluções/protótipos criados (obrigatório a todos os participantes).</p>
-                
+                <p>3. Declaração de Cessão de Direitos Autorais das soluções/protótipos criados (obrigatório a todos os
+                    participantes).</p>
+
                 <p><strong>6. Do Cancelamento da Participação</strong></p>
                 <p>A organização reserva-se o direito de cancelar a participação do inscrito em caso de:</p>
                 <p>• Descumprimento dos prazos ou regras deste regulamento;</p>
                 <p>• Conduta inadequada, desrespeitosa ou que viole a integridade do evento;</p>
                 <p>• Fornecimento de informações falsas ou fraudulentas.</p>
-                
+
                 <p><strong>7. Das Disposições Finais</strong></p>
                 <p>• A inscrição implica a aceitação integral destes Termos e Condições.</p>
                 <p>• Os casos omissos serão resolvidos pela Comissão Organizadora do Hackathon.</p>
-            </div>             
-            <label class="terms-accept">                 
-                <input type="checkbox" name="aceite_termos" value="1" required <?php echo (isset($_POST['aceite_termos']) && $_POST['aceite_termos'] == '1') ? 'checked' : ''; ?>>                 
-                <span>Li e aceito os termos e condições <span class="required">*</span></span>             
+            </div>
+            <label class="terms-accept">
+                <input type="checkbox" name="aceite_termos" value="1" required <?php echo (isset($_POST['aceite_termos']) && $_POST['aceite_termos'] == '1') ? 'checked' : ''; ?>>
+                <span>Li e aceito os termos e condições <span class="required">*</span></span>
             </label>
         </div>
 
-        <button type="submit" class="submit-btn">
-            Inscrever Equipe
+        <button type="submit" class="submit-btn" id="submitBtn">
+            <span class="button-text">Finalizar Inscrição</span>
+            <span class="spinner" style="display:none;"></span>
         </button>
+
     </div>
+
+
 </form>
+
+
+<!-- Modal de Categorias -->
+<div id="categoryModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Categorias de Inscrição</h2>
+        <?php foreach ($categorias as $categoria_item): ?>
+            <h4><?php echo htmlspecialchars($categoria_item["nome"]); ?></h4>
+            <p><?php echo nl2br(htmlspecialchars($categoria_item["descricao"])); ?></p>
+        <?php endforeach; ?>
+    </div>
+</div>

@@ -31,7 +31,7 @@ class Equipe
             INSERT INTO equipes (programa_id, categoria_id, nome_equipe, descricao, link_pitch, max_membros, status, created_at) 
             VALUES (?, ?, ?, ?, ?, 6, 'ativa', NOW())
         ");
-        $stmt->execute([$programa_id, $nome_equipe, $descricao, $link_pitch]);
+                $stmt->execute([$programa_id, $categoria_id, $nome_equipe, $descricao, $link_pitch]);
         return $this->pdo->lastInsertId();
     }
 

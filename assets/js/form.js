@@ -516,3 +516,42 @@ window.removeMember = function (memberNum) {
         teamForm.removeMember(memberNum);
     }
 };
+
+// Lógica para o Modal de Categorias
+const categoriaHelpIcon = document.getElementById("categoriaHelpIcon");
+const categoryModal = document.getElementById("categoryModal");
+const closeButton = document.querySelector(".close-button");
+
+if (categoriaHelpIcon && categoryModal && closeButton) {
+    categoriaHelpIcon.addEventListener("click", () => {
+        categoryModal.style.display = "flex"; // Usa flex para centralizar
+    });
+
+    closeButton.addEventListener("click", () => {
+        categoryModal.style.display = "none";
+    });
+
+    window.addEventListener("click", (event) => {
+        if (event.target == categoryModal) {
+            categoryModal.style.display = "none";
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('teamForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const buttonText = submitBtn.querySelector('.button-text');
+    const spinner = submitBtn.querySelector('.spinner');
+
+    form.addEventListener('submit', (e) => {
+        // Validação básica do formulário (pode ser mais robusta)
+        if (form.checkValidity()) {
+            buttonText.style.display = 'none';
+            spinner.style.display = 'inline-block';
+            submitBtn.disabled = true;
+        } else {
+            // O navegador irá mostrar os erros de validação
+        }
+    });
+});

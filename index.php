@@ -5,13 +5,27 @@ session_start();
 
 require_once 'config/database.php';
 require_once 'classes/Programa.php';
-require_once 'classes/Equipe.php';;
-require_once 'includes/process_inscricao.php';
+require_once 'classes/Equipe.php';
+
+// Determinar qual página exibir
+$page = $_GET['page'] ?? 'form';
+
+// Se for a página de conclusão, apenas exibe
+if ($page === 'conclusion') {
+    include 'templates/conclusion.php';
+    exit;
+}
+
+// Incluir o processamento apenas se estiver na página do formulário
+if ($page === 'form') {
+    require_once 'includes/process_inscricao.php';
+}
 
 $success_message = null;
 $error_message = null;
 $programas = [];
 $unidades = [];
+$categorias = [];
 
 // Buscar programas disponíveis
 try {
@@ -38,16 +52,18 @@ try {
     $error_message = "Erro de conexão com o banco de dados.";
 }
 
-// Processar formulário se enviado
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($error_message)) {
-    $resultado = processarInscricao($_POST);
-    
-    if ($resultado['success']) {
-        $success_message = $resultado['message'];
-    } else {
-        $error_message = $resultado['message'];
-    }
+// Verificar mensagem de erro da sessão
+if (isset($_SESSION['error_message'])) {
+    $error_message = $_SESSION['error_message'];
+    unset($_SESSION['error_message']);
 }
+
+// Verificar mensagem de sucesso da sessão
+if (isset($_SESSION['success_message'])) {
+    $success_message = $_SESSION['success_message'];
+    unset($_SESSION['success_message']);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -69,45 +85,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($error_message)) {
         </div>
 
         <div class="form-container">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-
-            <?php if ($success_message): ?>
-                <div class="alert alert-success">
-                    <?php echo htmlspecialchars($success_message); ?>
+            <?php if ($page === 'form'): ?>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
                 </div>
-            <?php endif; ?>
 
-            <?php if ($error_message): ?>
-                <div class="alert alert-error">
-                    <?php echo htmlspecialchars($error_message); ?>
+                <?php if ($success_message): ?>
+                    <div class="alert alert-success">
+                        <?php echo htmlspecialchars($success_message); ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($error_message): ?>
+                    <div class="alert alert-error">
+                        <?php echo htmlspecialchars($error_message); ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (empty($programas) && !$error_message): ?>
+                    <div class="alert alert-error">
+                        Nenhum programa disponível no momento.
+                    </div>
+                <?php elseif (!empty($programas)): ?>
+
+                <div class="info-card">
+                    <strong>Informações importantes:</strong><br>
+                    • Equipes de até 6 membros<br>
+                    • O primeiro membro será o líder<br>
+                    • Todos os dados são obrigatórios
                 </div>
-            <?php endif; ?>
 
-            <?php if (empty($programas) && !$error_message): ?>
-                <div class="alert alert-error">
-                    Nenhum programa disponível no momento.
-                </div>
-            <?php elseif (!empty($programas)): ?>
+                <?php include 'templates/form.php'; ?>
 
-            <div class="info-card">
-                <strong>Informações importantes:</strong><br>
-                • Equipes de até 6 membros<br>
-                • O primeiro membro será o líder<br>
-                • Todos os dados são obrigatórios
-            </div>
-
-            <?php include 'templates/form.php'; ?>
-
+                <?php endif; ?>
             <?php endif; ?>
         </div>
     </div>
 
+    <?php if ($page === 'form'): ?>
     <script>
         const UNIDADES_DATA = <?php echo json_encode($unidades ?? []); ?>;
     </script>
     <script src="assets/js/form.js"></script>
-
+    <?php endif; ?>
 </body>
 </html>
