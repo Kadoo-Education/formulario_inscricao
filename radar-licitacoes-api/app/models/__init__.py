@@ -1,0 +1,1 @@
+from .licitacao import Licitacao
