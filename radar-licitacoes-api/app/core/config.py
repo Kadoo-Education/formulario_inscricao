@@ -4,7 +4,7 @@ from pydantic import field_validator
 class Settings(BaseSettings):
     DATABASE_URL: str
     DB_ECHO: bool = True
-    PNCP_API_BASE_URL: str = "https://treinamento.api.pncp.gov.br/api/v1/contratacoes"
+    PNCP_API_BASE_URL: str = "https://pncp.gov.br/api/consulta/v1/contratacoes"
 
     @field_validator("DATABASE_URL", mode="before")
     @classmethod
