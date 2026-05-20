@@ -1,25 +1,14 @@
 import pytest
-import asyncio
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from app.core.database import Base
 from app.core.config import settings
 
-# Test database URL - using a different database for tests if possible, 
-# but following GEMINI.md advice to use docker-configured one.
-# For simplicity, we'll use the one from settings but ideally we'd use a separate one.
-TEST_DATABASE_URL = settings.DATABASE_URL
+# Force asyncpg protocol
+TEST_DATABASE_URL = settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
 
-@pytest.fixture(scope="session")
-def event_loop():
-    try:
-        loop = asyncio.get_running_loop()
-    except RuntimeError:
-        loop = asyncio.new_event_loop()
-    yield loop
-    loop.close()
-
-@pytest.fixture(scope="session")
+@pytest.fixture
 async def test_engine():
+    # Use function scope for engine to avoid loop sharing issues on Windows
     engine = create_async_engine(TEST_DATABASE_URL)
     
     async with engine.begin() as conn:
@@ -38,7 +27,6 @@ async def db_session(test_engine):
         bind=test_engine,
         expire_on_commit=False,
         autoflush=False,
-        autocommit=False,
     )
     
     async with async_session() as session:
