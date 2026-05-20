@@ -15,16 +15,14 @@ sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), ".."
 
 from app.core.database import Base
 from app.models import Licitacao  # Ensure models are imported for autogenerate
-
-load_dotenv()
+from app.core.config import settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
-# Set sqlalchemy.url from environment variable
-database_url = os.getenv("DATABASE_URL").replace("postgresql://", "postgresql+asyncpg://")
-config.set_main_option("sqlalchemy.url", database_url)
+# Set sqlalchemy.url from settings
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
