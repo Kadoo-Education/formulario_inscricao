@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from decimal import Decimal
 from typing import Optional, List
-from sqlalchemy import String, Text, Numeric, DateTime, ForeignKey, Integer
+from sqlalchemy import String, Text, Numeric, DateTime, ForeignKey, Integer, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
@@ -37,6 +37,10 @@ class LicitacaoItem(Base):
     valor_total: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2))
     
     licitacao: Mapped["Licitacao"] = relationship("Licitacao", back_populates="itens")
+
+    __table_args__ = (
+        UniqueConstraint("licitacao_id", "numero_item", name="uq_licitacao_item_numero"),
+    )
 
 class LicitacaoHistorico(Base):
     __tablename__ = "licitacao_historico"
