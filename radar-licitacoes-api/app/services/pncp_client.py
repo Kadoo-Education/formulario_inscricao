@@ -58,7 +58,7 @@ class PNCPClient:
             response = await self.client.get(url, params=params, headers=headers)
             
             if response.status_code == 204:
-                return {"data": [], "totalPaginas": 0, "totalRegistros": 0}
+                return []
                 
             response.raise_for_status()
             return response.json()

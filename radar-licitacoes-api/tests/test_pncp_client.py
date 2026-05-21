@@ -43,4 +43,4 @@ async def test_fetch_itens_204(httpx_mock):
         pncp_client = PNCPClient(client=client)
         data = await pncp_client.fetch_itens("12345678000199", "2024", "1")
         
-        assert data == {"data": [], "totalPaginas": 0, "totalRegistros": 0}
+        assert data == []
