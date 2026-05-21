@@ -1,48 +1,66 @@
 import pytest
-from unittest.mock import AsyncMock, patch, MagicMock
-from datetime import datetime
+import re
+from unittest.mock import patch
 from app.services.scrapper_task import sync_pncp_data
 from app.models.licitacao import Licitacao
 
 @pytest.mark.asyncio
-async def test_sync_pncp_data_empty_db(httpx_mock):
-    # Mock PNCP API response
+async def test_sync_pncp_data_orchestration(httpx_mock, db_session):
+    # Mock PNCP Response for a chunk
     mock_response = {
         "data": [
             {
-                "numeroControlePNCP": "12345",
-                "orgaoEntidade": {"cnpj": "123", "razaoSocial": "Orgao Teste"},
+                "numeroControlePNCP": "00000000000191-1-000001-2024",
+                "orgaoEntidade": {"cnpj": "00000000000191", "razaoSocial": "Orgao Teste"},
                 "objetoCompra": "Objeto Teste",
-                "valorTotalEstimado": 1000.0,
-                "linkSistemaOrigem": "http://teste.com",
-                "dataPublicacaoPncp": "2024-05-20T00:00:00",
-                "dataEncerramentoProposta": "2024-05-23T00:00:00",
-                "situacaoCompraNome": "Divulgada"
+                "valorTotalEstimado": 1000.00,
+                "situacaoCompraNome": "Recebendo Propostas",
+                "dataPublicacaoPncp": "2024-01-01T10:00:00",
+                "dataEncerramentoProposta": "2024-01-10T10:00:00",
+                "linkSistemaOrigem": "http://teste.com"
             }
         ],
         "totalPaginas": 1,
         "totalRegistros": 1
     }
-    httpx_mock.add_response(json=mock_response)
+    
+    # Mock items response
+    mock_items = [
+        {
+            "numeroItem": 1,
+            "descricao": "Item 1",
+            "quantidade": 10,
+            "unidadeMedida": "UN",
+            "valorUnitarioEstimado": 100.00,
+            "valorTotal": 1000.00
+        }
+    ]
 
-    # Mock DB session and service
-    with patch("app.services.scrapper_task.AsyncSessionLocal") as mock_session_local:
-        mock_session = AsyncMock()
-        mock_session_local.return_value.__aenter__.return_value = mock_session
-        
-        # Mocking the query to check if DB is empty
-        mock_result = MagicMock()
-        mock_result.scalar.return_value = None
-        mock_session.execute.return_value = mock_result
+    # Register mocks using regex
+    httpx_mock.add_response(
+        url=re.compile(r".*/publicacao.*"),
+        json=mock_response
+    )
+    httpx_mock.add_response(
+        url=re.compile(r".*/itens.*"),
+        json=mock_items
+    )
 
-        with patch("app.services.scrapper_task.LicitacaoService") as mock_service_class:
-            mock_service = AsyncMock()
-            mock_service_class.return_value = mock_service
-            
-            await sync_pncp_data()
-            
-            # Verify if upsert was called with mapped data
-            assert mock_service.upsert_licitacoes.called
-            args, _ = mock_service.upsert_licitacoes.call_args
-            assert args[1][0]["id_pncp"] == "12345"
-            assert args[1][0]["orgao_nome"] == "Orgao Teste"
+    # Patch the chunking loop to run only 1 iteration to speed up test
+    with patch("app.services.scrapper_task.range", return_value=[0]):
+        await sync_pncp_data()
+
+    # Verify if licitacao was saved
+    from sqlalchemy import select
+    from sqlalchemy.orm import selectinload
+    
+    # We need to eager load itens because the session might be closed or not loading correctly in test
+    result = await db_session.execute(select(Licitacao).options(selectinload(Licitacao.itens)))
+    licitacoes = result.scalars().all()
+    
+    assert len(licitacoes) == 1
+    assert licitacoes[0].id_pncp == "00000000000191-1-000001-2024"
+    
+    # Verify items
+    assert len(licitacoes[0].itens) == 1
+    assert licitacoes[0].itens[0].descricao == "Item 1"
