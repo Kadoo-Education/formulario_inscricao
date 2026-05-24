@@ -32,9 +32,16 @@ class SorteioApp(App):
     }
     """
 
+    BINDINGS = [("f10", "save_and_quit", "Salvar e Sair")]
+
     def on_mount(self):
         self.manager = ParticipantManager("sorteio_equipes.csv")
         self.current_candidate = None
+
+    def action_save_and_quit(self):
+        filename = self.manager.save_report()
+        self.notify(f"Relatório salvo em {filename}")
+        self.exit()
 
     def compose(self) -> ComposeResult:
         yield Header()
