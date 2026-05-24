@@ -51,8 +51,22 @@ class SorteioApp(App):
         yield Footer()
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
-        if event.button.id == "btn-draw":
+        if event.button.id == "btn-confirm":
+            self.manager.confirm_winner(self.current_candidate)
+            self.query_one("#winners-list").append(
+                ListItem(Label(f"{self.current_candidate['full_name']} ({self.current_candidate['time']})"))
+            )
+            self.reset_ui()
+        elif event.button.id == "btn-absent":
+            self.manager.remove_absent(self.current_candidate)
+            self.reset_ui()
+        elif event.button.id == "btn-draw":
             self.action_draw()
+
+    def reset_ui(self):
+        self.current_candidate = None
+        self.query_one("#winner-display").update(Label(""))
+        self.query_one("#actions").add_class("hidden")
 
     @work(exclusive=True)
     async def action_draw(self):
