@@ -47,3 +47,28 @@ def test_remove_absent(tmp_path):
     
     assert len(manager.available) == 0
     assert len(manager.winners) == 0
+
+def test_save_report(tmp_path):
+    import os
+    csv_file = tmp_path / "test.csv"
+    content = "time,full_name,email\nTeam A,User 1,u1@test.com"
+    csv_file.write_text(content)
+    
+    manager = ParticipantManager(str(csv_file))
+    winner = manager.available[0]
+    manager.confirm_winner(winner)
+    
+    # Change directory to tmp_path so the file is created there
+    original_cwd = os.getcwd()
+    os.chdir(tmp_path)
+    try:
+        filename = manager.save_report()
+        
+        assert os.path.exists(filename)
+        with open(filename, mode='r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+            assert len(rows) == 1
+            assert rows[0]['full_name'] == "User 1"
+    finally:
+        os.chdir(original_cwd)

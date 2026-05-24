@@ -29,3 +29,13 @@ class ParticipantManager:
     def remove_absent(self, person):
         if person in self.available:
             self.available.remove(person)
+
+    def save_report(self):
+        import datetime
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M")
+        filename = f"relatorio_sorteio_{timestamp}.csv"
+        with open(filename, mode='w', encoding='utf-8', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=['time', 'full_name', 'email'])
+            writer.writeheader()
+            writer.writerows(self.winners)
+        return filename
