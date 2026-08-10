@@ -1,0 +1,99 @@
+/* ---------- cover page ---------- */
+.capa-root{min-height:100vh;display:flex;flex-direction:column;}
+
+.capa-hero{
+  background:linear-gradient(155deg,var(--eq-navy-3) 0%,var(--eq-navy) 55%,var(--eq-navy-2) 100%);
+  padding:52px 48px 48px;
+  position:relative;overflow:hidden;
+  color:#fff;
+}
+.capa-hero::before{
+  content:'';position:absolute;
+  width:560px;height:560px;border-radius:50%;
+  background:radial-gradient(circle,rgba(58,160,232,.12),transparent 70%);
+  top:-180px;right:-80px;pointer-events:none;
+}
+.capa-hero::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--eq-orange),var(--eq-gold) 45%,var(--eq-blue));
+}
+.capa-brand-row{
+  display:flex;align-items:center;gap:9px;margin-bottom:26px;
+}
+.capa-brand-dot{
+  width:7px;height:7px;border-radius:2px;
+  background:linear-gradient(135deg,var(--eq-orange),var(--eq-gold));
+  flex:0 0 7px;
+}
+.capa-brand-name{
+  font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.48);
+}
+.capa-hero h1{
+  font-size:2rem;font-weight:800;line-height:1.15;margin:0 0 14px;
+  letter-spacing:-.015em;
+  background:linear-gradient(100deg,#fff 55%,rgba(255,255,255,.55));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.capa-hero-sub{
+  font-size:.86rem;line-height:1.65;color:rgba(255,255,255,.55);
+  max-width:520px;margin:0 0 30px;
+}
+.capa-meta-row{display:flex;gap:28px;flex-wrap:wrap;}
+.capa-meta-item{display:flex;flex-direction:column;gap:3px;}
+.capa-meta-label{
+  font-size:.58rem;text-transform:uppercase;letter-spacing:.09em;
+  color:rgba(255,255,255,.35);font-weight:700;
+}
+.capa-meta-val{font-size:.75rem;color:rgba(255,255,255,.68);font-weight:600;}
+
+/* ---------- modules ---------- */
+.capa-body{flex:1;padding:36px 48px 56px;}
+.capa-section-label{
+  font-size:.62rem;font-weight:700;color:var(--ink-faint);
+  text-transform:uppercase;letter-spacing:.09em;margin-bottom:16px;
+}
+.capa-modules{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));
+  gap:14px;
+}
+.capa-module{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);
+  padding:22px 22px 18px;text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;gap:12px;
+  transition:border-color .15s var(--ease),box-shadow .18s var(--ease),transform .15s var(--ease);
+  position:relative;overflow:hidden;
+}
+.capa-module:not(.capa-module-disabled):hover{
+  border-color:var(--eq-orange);box-shadow:var(--shadow-md);transform:translateY(-2px);
+}
+.capa-module-disabled{cursor:default;opacity:.7;}
+.capa-module-accent{
+  position:absolute;top:0;left:0;right:0;height:3px;
+}
+.capa-module-icon{
+  width:38px;height:38px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;flex:0 0 38px;
+}
+.capa-module-icon svg{width:20px;height:20px;}
+.capa-module-title{
+  font-size:.92rem;font-weight:700;color:var(--eq-navy);margin-bottom:5px;
+}
+.capa-module-desc{
+  font-size:.76rem;line-height:1.6;color:var(--ink-soft);
+}
+.capa-module-footer{
+  margin-top:auto;display:flex;align-items:center;
+}
+.capa-module-link{
+  font-size:.71rem;font-weight:700;color:var(--eq-orange);
+  display:inline-flex;align-items:center;gap:4px;
+}
+.capa-badge-soon{
+  font-size:.6rem;font-weight:700;color:var(--ink-faint);
+  background:var(--canvas-2);border:1px solid var(--line-strong);
+  padding:3px 9px;border-radius:20px;letter-spacing:.05em;text-transform:uppercase;
+}
